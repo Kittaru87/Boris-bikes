@@ -17,5 +17,6 @@ Under construction - tba
 ### Installation
 * Requires Ruby. Instructions to install are [here](https://www.ruby-lang.org/en/documentation/installation/).
 * Requires Rspec gem
-```gem install rspec
+```ruby
+gem install rspec
 ```
