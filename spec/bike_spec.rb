@@ -1,3 +1,5 @@
-require 'practice'
-describe "Bike" do
+require 'docking-station'
+
+RSpec.describe Bike do
+  it { is_expected.to respond_to (:working?) }
 end
