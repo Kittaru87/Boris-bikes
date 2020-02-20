@@ -41,4 +41,18 @@ describe DockingStation do
     20.times {subject.dock_bike(bike)}
     expect{subject.dock_bike(bike)}.to raise_error("full - no more bikes thanks")
   end
+  
+  it 'raises error if private full? method called' do
+    expect(subject).not_to respond_to(:full?)
+  end
+  # allows a user to set a docking station capacity
+  it 'set docking station capacity to 5' do
+    docking_station = DockingStation.new(5)
+    expect(docking_station).to have_attributes(capacity: 5) 
+  end
+
+  it 'docking station has default capacity of 20' do
+    expect(subject).to have_attributes(capacity: 20) 
+  end
+
 end
