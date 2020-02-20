@@ -1,16 +1,27 @@
 require 'docking-station'
 
+# used to remove duplication (bike = Bike.new) - allows you to 
+# test without calling a new bike each time.
+shared_context "common" do
+  let(:bike) {Bike.new}
+end
+
 describe DockingStation do
+  # calling "common" for entire DockingStation tests
+  include_context "common"
   it 'has the name DockingStation' do
     expect(DockingStation).to eq DockingStation
+  end
+  # testing to see if bike initializes with an empty array
+  it 'checking bike is an empty array' do
+    expect(subject).to have_attributes(bikes: [])
   end
 
   it { is_expected.to respond_to(:release_bike) }
 
-  it 'releases a working bike' do
-    bike = Bike.new
+  it 'releases a working bike/checking station for bike' do
     subject.dock_bike(bike)
-    expect(subject.release_bike).to eq bike
+    expect(subject.release_bike).to respond_to{subject.bikes.length}
   end
 
   it 'throws up an error if there are no bikes' do
@@ -18,23 +29,16 @@ describe DockingStation do
   end
   
   it { is_expected.to respond_to(:dock_bike).with(1).argument }
-  
 
-  it { is_expected.to respond_to(:bike) }
+  it { is_expected.to respond_to(:bikes) }
   
   it 'docks a bike' do
-    bike = Bike.new
-    expect(subject.dock_bike(bike)).to eq bike
+    # expecting a docked bike to change the length of the bike array by 1
+    expect{subject.dock_bike(bike)}.to change{subject.bikes.length}.by(1)
   end
 
-  it 'checking a station for a bike' do
-    bike = Bike.new
-    subject.dock_bike(bike)
-    # expect {raise subject.bike}.to raise_error
-    expect(subject.bike).to eq bike
-
+  it 'sets a max limit of 20 bikes per docking station' do
+    20.times {subject.dock_bike(bike)}
+    expect{subject.dock_bike(bike)}.to raise_error("full - no more bikes thanks")
   end
-
-
-
 end
